@@ -1,84 +1,96 @@
 ---
 topic: agent operation desks — distilled doctrine
-status: verified
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Agent Desk Doctrine
 
 How to run a multi-step job as a one-human desk, and what to enforce in the
-harness. Every claim cites its source cycle; the underlying private corpus
-stays private by design.
+harness. It distils a private research corpus (19 study cycles, 2026-09).
+Where a law rests on a public paper, the paper is cited inline. Where it rests
+on the private corpus or on one field audit, it says so. Numbers are figures
+reported by their source, not guarantees for your setup.
 
-## The one-paragraph version
+## The architecture in five parts
 
-The proven minimal architecture is five parts:
+1. **A file board.** One markdown card per job, with frontmatter state, and
+   one dispatcher. The disk is the checkpoint and the board is the audit
+   trail.
+2. **A two-tier split.** A frontier planner that never implements, plus cheap
+   workers that start with a fresh context.
+3. **Graduated autonomy.** Write down when a task class moves from ask to
+   allow. Roll back on an unapproved irreversible attempt, an error spike, or
+   frequent interrupts.
+4. **Verbatim constraint handoff.** Restate must and must-not rules at every
+   hop.
+5. **Deterministic gates with an independent validator.** Never a worker's
+   self-check, and never an LLM judge as the final word.
 
-1. A file board — one markdown card per job with frontmatter state, one
-   dispatcher polling. Disk is the checkpoint; git is the audit trail.
-2. A two-tier split — a frontier planner that never implements, then cheap
-   sealed-context workers.
-3. Graduated autonomy — documented ask→allow promotions; roll back on any
-   interrupt spike.
-4. Verbatim constraint handoff — restated at every hop, because summaries
-   leak ~54% of forbidden actions.
-5. Deterministic pre-execution gates with an independent validator. Never a
-   worker self-check or an LLM judge.
+## The laws
 
-## The laws (evidence-backed, in order of cost if violated)
-
-1. **The file board is the spine.** Markdown tasks + a polling dispatcher beat
-   message brokers; the disk is the checkpoint, `grep` is the observability.
-   A card left `running` is a lie the next session believes.
-2. **Two tiers, shallow depth.** A frontier planner that never implements,
-   then parallel cheap workers; keep pipeline depth ≤ 4, because each extra
-   stage adds ~0.9 corrupted-downstream stages.
-3. **Constraints travel verbatim; trajectories travel asymmetrically.**
-   Restate must/forbidden rules at every hop. A compression step deactivates
-   about 100% of must-do rules and leaks 54% of forbidden actions; explicit
-   verbatim restatement cuts leakage from 73% to under 15%.
-4. **Verification first.** Verification gaps and task incompleteness dominate
-   production failures, not inter-agent misalignment. Budget for it.
-5. **Validators are independent, gates are deterministic, skills are vetted.**
-   A worker self-check doesn't count; an LLM judge can be gamed (one study:
-   100% "pass" against 68% verifiable truth). Skills from public registries
-   need a gate: one scan found 157 malicious skills.
-6. **Delete coordination layers unless they prove their worth.** A
-   merge-integrator added more bottlenecks than it solved.
-7. **Cost-normalize everything, and self-instrument.** No public benchmark
-   measures human minutes, multi-day durability or cost-per-verified-outcome.
-   Keep a per-task ledger; compute leverage weekly.
-8. **Cost-normalize everything, and self-instrument.** See law 7's canonical
-text and law 5's verification emphasis.
-9. **Phone-class caps bind first.** On mobile/constrained hardware, allow at
-   most 1 dispatcher + 2 workers; errors double under sustained load; file
-   checkpoints are mandatory because the OS kills processes.
-10. **Money is never autonomous.** Order placement, key rotation, and the
-    kill-switch stay human. No LLM-trader alpha survives friction accounting,
-    and every live institutional deployment caps agents below order entry.
-11. **Autonomy graduates on evidence and rolls back on signal.** Start at
-    ask-level; promote on a clean streak (≈10 runs); demote on any unapproved
-    irreversible attempt. Regulation documents the criteria.
-12. **An audit only validates the era it looked at.** Permissions and plugins
-    drift. Re-check the resolved rule set after any config change.
-13. **A gate that looks green but fails silent is worse than no gate.**
-    Measure the false-green path explicitly (once: an autosync reported
-    "Synced" for 12 days while nothing left the device).
+1. **The file board is the spine.** Markdown cards and a dispatcher beat
+   message brokers for a small desk on one machine. The disk is the
+   checkpoint, `grep` is the observability. A card left `running` is a lie the
+   next session believes.
+2. **Two tiers, shallow depth.** Keep pipeline depth to 3–4 stages. In
+   controlled probes, mean cascade radius grew from 0.9 to 4.7 corrupted
+   stages as depth went from 3 to 7 (OrchestraBench,
+   [arXiv:2608.05263](https://arxiv.org/abs/2608.05263)).
+3. **Constraints travel verbatim.** Handoff summaries erode blocking
+   requirements: multihop compression deactivated 97.2% of blockers, and
+   restoring the full blocker text cut forbidden actions from 85.2% to 0.0%
+   ([arXiv:2608.24569](https://arxiv.org/abs/2608.24569)). Vague boundary
+   language leaked in 73% of GPT cases, explicit constraints in under 15%
+   ([arXiv:2608.29028](https://arxiv.org/abs/2608.29028)).
+4. **Trajectories travel asymmetrically.** When escalating cheap→strong, pass
+   less of the cheap model's trajectory; when downshifting, pass more. Full
+   trajectory escalation recovered less than half the quality gap
+   ([arXiv:2608.24358](https://arxiv.org/abs/2608.24358)).
+5. **Verification first.** In the corpus's production case studies, failures
+   came mostly from missing verification and incomplete tasks, not from agents
+   misunderstanding each other. Budget for checking before you add agents.
+6. **Validators are independent; gates are deterministic; skills are vetted.**
+   Agents can game a judge: in one report, cached answer keys produced a 100%
+   pass rate that concealed 68% true capability (position paper,
+   [arXiv:2609.02246](https://arxiv.org/abs/2609.02246)). Of 98,380 registry
+   skills, 157 were confirmed malicious
+   ([arXiv:2602.06547](https://arxiv.org/abs/2602.06547)). Gate every skill
+   before install.
+7. **Delete coordination layers unless they prove their worth.** An extra
+   integrator or mediator tier is a cost until it shows a measured gain.
+8. **Cost-normalise and self-instrument.** No public benchmark measures human
+   minutes, multi-day durability or cost per verified outcome. Keep a per-task
+   ledger and compute leverage weekly.
+9. **Constrained hardware caps the desk first.** On a phone, the OS kills
+   background processes and free API tiers cap requests per day. Run one
+   dispatcher and at most two workers, in batches, and checkpoint to disk.
+10. **Money is never autonomous.** Orders, key rotation and kill switches stay
+    human. Reported alpha from LLM trading agents is not deployment evidence
+    ([arXiv:2605.16895](https://arxiv.org/abs/2605.16895)).
+11. **Autonomy graduates on evidence and rolls back on signal.** Start every
+    task class at ask. Promote it after a clean streak you define in writing
+    (for example, 10 runs). Demote it on any unapproved irreversible attempt.
+12. **An audit validates only the version it looked at.** Permissions and
+    plugins drift. Re-check the resolved rules after every config change.
+13. **A gate that looks green but fails silently is worse than no gate.**
+    Test the false-green path on purpose. In one field audit, a sync job
+    reported "synced" for 12 days while nothing left the device
+    (`docs/AUDIT.md`).
 14. **Irreversibility has two classes.** The physical kind (a push, a spend, a
-    delete) is obvious. The record kind (a committed report, a published
-    claim) is reversible in the world but irreversible in the audit trail.
-    Gate the second one just as hard: divergence detection, single writer,
-    one named owner for shared identifiers.
-15. **A gate may never speak the language of the outcome.** No artifact may
-    call a chain "compliant" or a protection "adequate". A deterministic gate
-    constrains one step, and calling it the outcome is the failure mode.
+    delete) is obvious. The record kind (a published claim, a committed
+    report) can be corrected but never unpublished. Gate both. Give every
+    shared identifier one named owner.
+15. **A gate may not speak the language of the outcome.** No artifact may call
+    a system "compliant" or a protection "adequate". A gate checks one step;
+    reading it as the outcome is the failure.
 
-## What humans keep forever
+## What humans keep
 
-- Approvals on irreversible actions (Class P).
+- Approval of irreversible actions.
 - Money and order execution.
 - Judgment where no verifiable gate exists.
 - Legal accountability.
 
-The desk compresses the human into a ~13:1 exception queue; the instruction
-manual to keep that queue is `docs/HARDENING.md`.
+A well-run desk turns the human into an exception queue: you review what the
+gates flag, not every step. `docs/HARDENING.md` shows how to check that your
+harness actually enforces the gates the desk relies on.

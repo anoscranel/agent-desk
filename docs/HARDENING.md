@@ -1,16 +1,15 @@
 # Hardening guide
 
-How to prove what a harness's permission layer really enforces, from a
-2026-10 audit of opencode 1.18.22. Sections 5-7 (bash per-command-node,
-process.env inheritance, blocklist tripwires) hold across harnesses; the
-rule-resolution details (findLast, defaults insertion order, md frontmatter
-overrides) are opencode-specific and drift with versions. They may drift; re-run
-the checks after each upgrade.
+How to prove what a harness's permission layer really enforces. The notes
+come from a 2026-10 audit of opencode 1.18.22. Points 5-7 below (per-command
+matching, inherited environment, blocklists as tripwires) apply to most
+harnesses. Points 1-4 and the check script are opencode-specific and can
+change between versions: re-run the check after every upgrade.
 
 ## The semantics you need to know
 
-1. **Evaluation is findLast over [defaults, global, agent], in insertion
-   order.** The last matching rule wins. Wildcards: `*` → `.*`, `?` → `.`,
+1. **Evaluation is last-match-wins over [built-in defaults, global rules,
+   agent rules], in insertion order.** The last matching rule wins. Wildcards: `*` → `.*`, `?` → `.`,
    and a trailing `" *"` is optional.
 2. **Built-in defaults come before yours.** The default `read *.env: ask`
    sits before the user's global rules. A `read: {"*": "allow"}` therefore
@@ -48,10 +47,10 @@ XDG_CONFIG_HOME=$S/cfg XDG_DATA_HOME=$S/data XDG_STATE_HOME=$S/state \
   opencode debug agent <name> --pure
 ```
 
-The output is the resolved rule list in the order findLast sees it. Then
+The output is the resolved rule list, in evaluation order. Then
 score your own fixtures. If you use a script, delete `BUN_BE_BUN` from the
-child environment. Then evaluate each fixture under two orderings (findLast
-and longest-match) so the result does not depend on an internal code path.
+child environment. Then evaluate each fixture under two orderings
+(last-match and longest-match) so the result does not depend on an internal code path.
 
 ## The limitations that remain
 

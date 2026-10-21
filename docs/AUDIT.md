@@ -13,16 +13,17 @@ The desk's prompt promised rules the harness did not enforce.
 - A read-all rule (`read: "*": allow`) sat after the built-in `*.env: ask`
   in the resolved rule list, so the secrets file was readable without a
   prompt.
-- The "read-only" critic and reviewer agents could edit files and run bash,
-  because their permission lived in their markdown frontmatter and wasn't
-  recognized as overriding the config in `opencode.jsonc`.
-- A dashboard reported "Synced" for 12 days while a stale lock file blocked
-  every commit; the notification used `|| true` and ignored the real exit
-  code. At the time of audit, 7,962 paths (about 110 MB) had not left the
-  device.
-- A telemetry plugin attacked the same class of event it was supposed to
-  record, so it recorded zero errors while the backing database held six
-  thousand errored tool calls.
+- The "read-only" critic and reviewer agents could edit files and run bash.
+  Their markdown frontmatter granted edit rights and set no bash limit, and a
+  key in an agent's frontmatter overrides the same key in `opencode.jsonc`,
+  so a fix made only in the jsonc would have been ignored.
+- A sync job reported "Synced" for 12 days while a stale lock file blocked
+  every commit. The script swallowed the failure with `|| true` and logged an
+  exit code read after `$(date)` had reset it. At audit time, 7,962 changed
+  paths (about 110 MB) had never left the device.
+- A telemetry plugin listened on a hook that fires only after a tool
+  succeeds, so it logged zero errors while the session database held about
+  6,900 failed tool calls from the same period.
 
 ## How the fixes were validated
 
@@ -36,7 +37,7 @@ The desk's prompt promised rules the harness did not enforce.
 - A tabletop asked a fresh model to answer 10 scenarios using only the prompt
   file: the old prompt scored 5/10, the new one 10/10. The question key was
   written and hashed before either run.
-- The vulnerability scan of un-committed files looked for key **shapes** and
+- The secret scan of uncommitted files looked for key **shapes** and
   never printed a value, so the scan itself could not leak.
 
 ## Structural limits (still true after the fixes)
