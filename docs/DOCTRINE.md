@@ -1,6 +1,6 @@
 ---
 topic: agent operation desks — distilled doctrine
-version: 1.1.0
+version: 1.1.1
 ---
 
 # Agent Desk Doctrine

@@ -1,6 +1,6 @@
 # LEDGER: <op slug>
 
-Actuals only; no caps. Human-min = the operator's minutes. Date every number.
+Actuals, recorded against the spend ceiling and retry limit you set. Human-min = the operator's minutes. Date every number.
 
 | Job | Status | Agent / session | Cost | Retries | Interrupts | Human-min | Verification | Headline |
 |---|---|---|---|---|---|---|---|---|

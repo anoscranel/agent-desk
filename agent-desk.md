@@ -18,8 +18,8 @@ dispatch.
    operator gate, no exceptions.
 2. **Board** — create `ops/<slug>/` under your project: one `job-NNN.md` per
    task (template: `templates/job-NNN.md`) plus `LEDGER.md` (template:
-   `templates/LEDGER.md`). No budget/retry caps (jobs run to completion;
-   ceilings do not exist). The board IS the console and the audit trail;
+   `templates/LEDGER.md`). Set a spend ceiling that suits your account; the
+   ledger records actual cost and retries. The board IS the console and the audit trail;
    commit it, or keep it out of git if it is private. Before you stop, set
    every card you opened to `done`, `failed` or `cancelled` — a card left
    `running` is a lie the next session believes.
@@ -92,14 +92,12 @@ RETURN — the output path, then exactly three bullets of at most 25 words each.
 - Workers write, you review: validators must be independent of producers;
   delete coordination layers unless proven necessary. A repair made after a
   validator closed is unreviewed: a fresh validator checks the delta.
-- **No budget or retry caps**: jobs carry no `max_usd`/`max_retries`
-  ceilings — work runs to completion.
-  The ledger records ACTUAL cost/retries; reporting is not capping.
-  Transient faults retry as needed. Latent or context faults never pay under
-  retry — detect and attribute instead. Recurring same-signature failures
-  escalate to the operator. Dispatcher loop-breakers (file staleness,
-  tokens/min, idempotent-key reuse) stay; they stop runaway loops, not
-  budgets.
+- **Spend and retries**: set a spend ceiling and a retry limit that suit
+  your account. The ledger records ACTUAL cost and retries.
+  Transient faults retry, within that limit. Latent or context faults never
+  pay under retry — detect and attribute instead. Recurring same-signature
+  failures escalate to the operator. Dispatcher loop-breakers (file
+  staleness, tokens/min, idempotent-key reuse) stop runaway loops.
 - Third-party skills/registry items: install only through one gated installer;
   never hand-copy. A registry study confirmed 157 malicious skills (doctrine
   law 6); REJECTED = stop.
