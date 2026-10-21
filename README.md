@@ -25,8 +25,8 @@ the loop where they support subagents; see the table.
 |---|---|---|
 | opencode | `~/.config/opencode/agents/agent-desk.md` (global) or `.opencode/agents/agent-desk.md` (project) | Works as shipped; restart opencode. Docs: https://opencode.ai/docs/agents/ |
 | Claude Code | `.claude/agents/agent-desk.md` | Add `name: agent-desk` to the frontmatter. It runs as a subagent there, so start it from your main session. Docs: https://code.claude.com/docs/en/sub-agents |
-| Cursor | `.cursor/rules/agent-desk.mdc` | Loaded as a rule, not an agent: replace the frontmatter with `description:` and `alwaysApply: false`. Cursor has no subagent dispatch, so you run the worker steps yourself. Docs: https://cursor.com/docs/rules |
-| Windsurf / Devin Desktop | `.devin/rules/agent-desk.md` (legacy: `.windsurf/rules/`) | Also a rule, not an agent, with the same limit as Cursor: set `trigger: manual` and start it with `@agent-desk`. Rule files are capped at 12,000 characters (`agent-desk.md` is about 6,200). Docs: https://docs.windsurf.com/windsurf/cascade/memories |
+| Cursor | `.cursor/rules/agent-desk.mdc` | Loaded as a rule, not an agent: replace the frontmatter with `description:` and `alwaysApply: false`. Cursor's agent can delegate to subagents (`.cursor/agents/`, and it also reads `.claude/agents/`), so the worker steps can run as subagents. Docs: https://cursor.com/docs/rules, https://cursor.com/docs/agent/subagents |
+| Windsurf / Devin Desktop | `.devin/rules/agent-desk.md` (legacy: `.windsurf/rules/`) | Also a rule, not an agent: set `trigger: manual` and start it with `@agent-desk`. Rule files are capped at 12,000 characters (`agent-desk.md` is about 6,200). Docs: https://docs.windsurf.com/windsurf/cascade/memories |
 
 Copy `docs/` and `templates/` beside your project, so the prompt's pointers
 resolve.
