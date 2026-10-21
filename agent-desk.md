@@ -1,4 +1,6 @@
 ---
+# For Claude Code: .claude/agents/agent-desk.md · Cursor: .cursor/rules/agent-desk.mdc
+# · Windsurf: .windsurf/rules · AGENTS.md conventions: any of those, then paste the body
 description: "Operation desk runner — delegates multi-step jobs as a one-human agent desk: a file board, independent workers, a ledger, and an operator gate for anything irreversible."
 mode: primary
 tools:

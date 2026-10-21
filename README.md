@@ -5,14 +5,19 @@ created: 2026-10-17
 
 # agent-desk
 
-A one-human operation desk for opencode: file-board spine, two-tier worker
-dispatch, verbatim briefs, independent validation, executable harness checks,
-operator-gated irreversibles. The report behind it is in `docs/DOCTRINE.md`.
+A one-human operation desk for any harness that lets you define a primary
+agent or agents file: opencode, Claude Code, Cursor, Windsurf and similar.
+File-board spine, two-tier worker dispatch, verbatim briefs, independent
+validation, executable harness checks, operator-gated irreversibles. The
+report behind it is in `docs/DOCTRINE.md`.
 
 # What you get
 
-- `agent-desk.md` — the desk prompt. Drop it into `~/.config/opencode/agents/`
-  (or the equivalent) and restart.
+- `agent-desk.md` — the desk prompt. The frontmatter is opencode's adapter
+  format (`mode: primary`, `tools: task`); other harnesses use their own
+  (Claude Code: `.claude/agents/`, Cursor: `.cursor/rules/`, AGENTS.md
+  convention: paste the body). The six loop steps and the constraint block
+  are harness-neutral.
 - `docs/DOCTRINE.md` — the 15 laws and the "what humans keep forever" limits.
 - `docs/HARDENING.md` — how to verify the rules your config really enforces
   (real-binary hermetic checks).

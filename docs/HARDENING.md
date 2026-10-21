@@ -1,7 +1,10 @@
 # Hardening guide
 
-What the permission layer actually enforces, and how to prove it. These
-notes are from a 2026-10 audit of opencode 1.18.22. They may drift; re-run
+How to prove what a harness's permission layer really enforces, from a
+2026-10 audit of opencode 1.18.22. Sections 5-7 (bash per-command-node,
+process.env inheritance, blocklist tripwires) hold across harnesses; the
+rule-resolution details (findLast, defaults insertion order, md frontmatter
+overrides) are opencode-specific and drift with versions. They may drift; re-run
 the checks after each upgrade.
 
 ## The semantics you need to know
