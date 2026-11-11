@@ -1,6 +1,6 @@
 ---
 topic: agent operation desks — distilled doctrine
-version: 1.1.1
+version: 1.2.0
 ---
 
 # Agent Desk Doctrine
@@ -94,3 +94,6 @@ reported by their source, not guarantees for your setup.
 A well-run desk turns the human into an exception queue: you review what the
 gates flag, not every step. `docs/HARDENING.md` shows how to check that your
 harness actually enforces the gates the desk relies on.
+
+Distilled from the private capstone as of its 2026-10-12 amendment state.
+Laws unchanged since; the capstone gained research-method amendments after that date.
