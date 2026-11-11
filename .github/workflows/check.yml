@@ -1,0 +1,26 @@
+name: check-release
+
+# The repository claims things about itself. This runs the script that proves
+# them on every push and pull request, so a drifting claim fails loudly instead
+# of waiting for someone to notice.
+#
+# The job is read-only: the script makes no writes, needs no network, and the
+# workflow grants only contents:read.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify the repository's own claims
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the tree
+        uses: actions/checkout@v4
+      - name: Run scripts/check-release.sh
+        run: bash scripts/check-release.sh

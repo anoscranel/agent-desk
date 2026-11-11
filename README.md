@@ -67,6 +67,10 @@ holds 15 laws, that no private path or key shape leaked into the tree. Verify th
 Read-only and offline; needs only bash and core text utilities. If you edit the tree, run it
 before you push; a claim and its bytes should never disagree in public.
 
+The same script runs in CI on every push and pull request
+(`.github/workflows/check.yml`, read-only), so a claim that drifts from the bytes
+fails on its own.
+
 ## Provenance
 
 The doctrine distils a private research corpus (19 study cycles, September

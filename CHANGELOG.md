@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.1 — 2026-11-11
+
+### Added
+- CI: `.github/workflows/check.yml` runs `scripts/check-release.sh` on every push and
+  pull request (read-only, `contents: read`, no secrets, no network). A claim that drifts
+  from the bytes now fails on its own instead of waiting for someone to notice.
+
+### Changed
+- README: the "Check it yourself" section says the checker also runs in CI.
+- docs/DOCTRINE.md: version bump to 1.3.1.
+
 ## 1.3.0 — 2026-11-11
 
 ### Added
