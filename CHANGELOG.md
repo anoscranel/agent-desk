@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.3.0 — 2026-11-11
+
+### Added
+- `scripts/check-release.sh` — verifies this repository's own claims against
+  its own bytes: promised files exist, every pointer in the prompt resolves, the doctrine
+  holds 15 laws, arXiv IDs are well-formed, no private path or key shape is in the tree,
+  the uncapped-spend default stays removed, CHANGELOG and DOCTRINE versions agree, the
+  job template carries every state the prompt requires, and the prompt fits the 12,000
+  character rule-file cap. Read-only, offline, exit 1 on any false claim.
+  Validated both ways: it passes on this tree, and planted defects (a dangling
+  pointer, a short law list, a version mismatch, a private path, a key shape, a
+  malformed arXiv ID) each make it exit 1.
+
+### Changed
+- README: documents the checker (what-you-get table row + a "Check it yourself" section).
+- docs/DOCTRINE.md: version bump to 1.3.0.
+
 ## 1.2.0 — 2026-11-11
 
 ### Fixed

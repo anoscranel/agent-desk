@@ -17,6 +17,7 @@ the loop where they support subagents; see the table.
 | `docs/DOCTRINE.md` | The 15 laws, with sources. |
 | `docs/HARDENING.md` | How to check which permission rules your harness actually enforces. |
 | `docs/AUDIT.md` | Case study: the audit that shaped these rules. |
+| `scripts/check-release.sh` | Verifies this repository's own claims against its own bytes. Run it after any edit. |
 | `LICENSE` | MIT. |
 
 ## Install
@@ -53,6 +54,18 @@ resolve.
 3. **How do you install skills?** Registry skills have shipped with malicious
    hooks. Install through one gated installer, and never copy a skill in by
    hand.
+
+## Check it yourself
+
+The repository makes claims about itself — that its pointers resolve, that the doctrine
+holds 15 laws, that no private path or key shape leaked into the tree. Verify them:
+
+```sh
+./scripts/check-release.sh          # prints every check; exits 1 on any false claim
+```
+
+Read-only and offline; needs only bash and core text utilities. If you edit the tree, run it
+before you push; a claim and its bytes should never disagree in public.
 
 ## Provenance
 
