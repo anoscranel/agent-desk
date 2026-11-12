@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.4.0 — 2026-11-12
+
+### Added
+- `scripts/board_lint.py` — census of board cards: states in use, assignees,
+  frontmatter, and `running` cards split by age (abandoned vs possibly live).
+- `scripts/board_close_check.py` — the close gate. Refuses to let an operation
+  close while any card is open, unnamed, or outside the schema, or while its
+  report carries no validation artifact. Exits 1 and names every problem.
+- `check-release.sh`: two new checks — the board tools carry no home-directory
+  paths, and `board_close_check.py` is *observed* to reject a bad op (a tool that
+  cannot fail is decoration).
+
+### Changed
+- README: documents both tools and adds a "Check your own board" section.
+- docs/DOCTRINE.md: version bump to 1.4.0.
+
+### Why
+These tools exist because a rule with no mechanism is a hope. In the desk that
+built them, 1,284 of 11,613 cards carried a state the schema does not define —
+across 34 distinct values, including prose written into the state field
+(`done   # verified 1790w on disk 2026-10-11`). A field every writer fills and no
+reader validates always ends up like that.
+
 ## 1.3.1 — 2026-11-11
 
 ### Added

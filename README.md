@@ -18,6 +18,8 @@ the loop where they support subagents; see the table.
 | `docs/HARDENING.md` | How to check which permission rules your harness actually enforces. |
 | `docs/AUDIT.md` | Case study: the audit that shaped these rules. |
 | `scripts/check-release.sh` | Verifies this repository's own claims against its own bytes. Run it after any edit. |
+| `scripts/board_lint.py` | Census of your board cards: states used, assignees, frontmatter, and `running` cards split by age (abandoned vs possibly live). |
+| `scripts/board_close_check.py` | The close gate: refuses to let an operation close while any card is open, unnamed, or outside the schema. |
 | `LICENSE` | MIT. |
 
 ## Install
@@ -70,6 +72,35 @@ before you push; a claim and its bytes should never disagree in public.
 The same script runs in CI on every push and pull request
 (`.github/workflows/check.yml`, read-only), so a claim that drifts from the bytes
 fails on its own.
+
+## Check your own board
+
+The two board tools are the mechanical half of the loop. Both are read-only and neither
+has a write path. They differ in how they fail, and the difference matters:
+
+- `board_close_check.py` **gates**: it exits 1 and names every problem when an operation
+  tries to close with a card open, unnamed, out of schema, or a report whose validation
+  claim is missing or explicitly disclaimed.
+- `board_lint.py` **reports**: it exits 0 on a normal census, and fails (1) only when a
+  root you named does not exist or a flag is malformed (2). It is a measuring instrument,
+  not a gate — do not wire it as one.
+
+```sh
+python3 scripts/board_lint.py ops research     # what do your cards claim?
+python3 scripts/board_lint.py --list=running   # the ones that are lies, oldest first
+python3 scripts/board_close_check.py ops/<slug> # may this operation close?
+```
+
+`board_close_check.py` exits 1 and names every problem when an operation tries to close
+with a card left `running`, a state outside the schema, or a report that neither names a
+validation artifact nor disclaims one in the plain form the gate detects ("no independent
+audit was performed" used to pass on the keyword alone). ⚠️ That detection is a heuristic,
+not an understanding: it looks for a negation within ~60 characters *before* the keyword,
+so "the independent audit was not performed" (negation after) still passes. The gate raises
+the cost of a careless close; it does not make a dishonest one impossible. It also refuses to close an
+operation that has no cards at all, which catches a mistyped path. In one desk it found 1,284 cards carrying a state the schema does not define —
+across 34 distinct values, including prose written into the state field. A field every
+writer fills and no reader validates always ends up like that.
 
 ## Provenance
 
